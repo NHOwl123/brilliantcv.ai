@@ -1,1 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>brilliantcv.ai - Under Construction</title>
+    <meta name="description" content="brilliantcv.ai - AI-powered job application assistant launching soon. Create tailored resumes and cover letters with artificial intelligence.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 600px;
+            animation: fadeIn 1s ease-in;
+        }
+        
+        .logo {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #fff, #f0f0f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .tagline {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        
+        .description {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 3rem;
+            opacity: 0.8;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .feature {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .feature h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+        
+        .feature p {
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+        
+        .launch-info {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 2rem;
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 2rem;
+        }
+        
+        .launch-title {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        
+        .launch-text {
+            opacity: 0.9;
+            margin-bottom: 1.5rem;
+        }
+        
+        .email-form {
+            display: flex;
+            gap: 1rem;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .email-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+        }
+        
+        .email-input::placeholder {
+            color: #666;
+        }
+        
+        .notify-btn {
+            padding: 12px 24px;
+            background: #4f46e5;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        .notify-btn:hover {
+            background: #4338ca;
+        }
+        
+        .contact {
+            margin-top: 2rem;
+            opacity: 0.8;
+        }
+        
+        .contact a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .contact a:hover {
+            text-decoration: underline;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @media (max-width: 768px) {
+            .logo { font-size: 2.5rem; }
+            .tagline { font-size: 1.3rem; }
+            .email-form { flex-direction: column; }
+            .features { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">brilliantcv.ai</div>
+        <div class="tagline">AI-Powered Job Application Assistant</div>
+        
+        <div class="description">
+            Transform your job search with intelligent resume tailoring, 
+            personalized cover letters, and interview preparation powered by advanced AI.
+        </div>
+        
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">🎯</div>
+                <h3>Smart Resume Tailoring</h3>
+                <p>AI analyzes job descriptions and customizes your resume for maximum impact</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">✍️</div>
+                <h3>Personalized Cover Letters</h3>
+                <p>Generate compelling cover letters that match your experience to job requirements</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">💼</div>
+                <h3>Application Tracking</h3>
+                <p>Organize and track all your job applications in one professional dashboard</p>
+            </div>
+        </div>
+        
+        <div class="launch-info">
+            <div class="launch-title">🚀 Launching Soon</div>
+            <div class="launch-text">
+                We're putting the finishing touches on brilliantcv.ai. 
+                Be the first to know when we launch!
+            </div>
+            <form class="email-form" onsubmit="handleSubmit(event)">
+                <input 
+                    type="email" 
+                    class="email-input" 
+                    placeholder="Enter your email" 
+                    required
+                >
+                <button type="submit" class="notify-btn">Notify Me</button>
+            </form>
+        </div>
+        
+        <div class="contact">
+            Questions? Contact us at <a href="mailto:mark@brilliantcv.ai">mark@brilliantcv.ai</a>
+        </div>
+    </div>
 
+    <script>
+        function handleSubmit(event) {
+            event.preventDefault();
+            const email = event.target.querySelector('.email-input').value;
+            
+            // Simple success message
+            alert('Thank you! We\'ll notify you when brilliantcv.ai launches.');
+            event.target.querySelector('.email-input').value = '';
+        }
+    </script>
+</body>
+</html>
