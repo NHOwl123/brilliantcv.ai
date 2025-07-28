@@ -211,9 +211,19 @@ export default function Subscription() {
 
   const downgradeSubscriptionMutation = useMutation({
     mutationFn: async (tier: string) => {
-      const response = await apiRequest("POST", "/api/downgrade-subscription", { tier });
-      return await response.json();
-    },
+  // Demo mode for Vercel deployment
+  const isVercelDemo = window.location.hostname.includes('brilliantcv.ai') || window.location.hostname.includes('vercel.app');
+  if (isVercelDemo) {
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    return {
+      clientSecret: 'pi_demo_client_secret_for_testing_' + Math.random().toString(36).substring(7)
+    };
+  }
+  
+  const response = await apiRequest("POST", "/api/create-subscription", { tier });
+  return await response.json();
+},
     onSuccess: (data) => {
       if (data.resetToFree) {
         toast({
