@@ -26,7 +26,7 @@ export default function Landing() {
       window.location.href = "/dashboard";
       return;
     }
-    window.location.href = "/api/login";
+    window.location.href = "/dashboard";
   };
 
   const handleGetStarted = () => {
@@ -36,7 +36,7 @@ export default function Landing() {
       window.location.href = "/dashboard";
       return;
     }
-    window.location.href = "/api/login";
+    window.location.href = "/dashboard";
   };
 
   const handleSubscriptionSelect = (tier: string) => {
@@ -58,7 +58,7 @@ export default function Landing() {
     if (!isAuthenticated) {
       // Store selected tier in localStorage and redirect to login
       localStorage.setItem("selectedTier", tier);
-      window.location.href = "/api/login";
+      window.location.href = "/dashboard";
     } else {
       // User is authenticated, redirect to subscription page with tier
       window.location.href = `/subscription?tier=${tier}`;
