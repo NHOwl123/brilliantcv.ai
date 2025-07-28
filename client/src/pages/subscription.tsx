@@ -145,7 +145,7 @@ export default function Subscription() {
         variant: "destructive",
       });
       setTimeout(() => {
-        window.location.href = "/api/login";
+        window.location.href = "/dashboard";
       }, 500);
     }
     
@@ -197,7 +197,7 @@ export default function Subscription() {
           variant: "destructive",
         });
         setTimeout(() => {
-          window.location.href = "/api/login";
+          window.location.href = "/dashboard";
         }, 500);
       } else {
         toast({
@@ -246,7 +246,7 @@ export default function Subscription() {
           variant: "destructive",
         });
         setTimeout(() => {
-          window.location.href = "/api/login";
+          window.location.href = "/dashboard";
         }, 500);
         return;
       }
@@ -278,7 +278,7 @@ export default function Subscription() {
           variant: "destructive",
         });
         setTimeout(() => {
-          window.location.href = "/api/login";
+          window.location.href = "/dashboard";
         }, 500);
         return;
       }
