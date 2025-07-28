@@ -21,8 +21,14 @@ export function Navigation() {
   };
 
   const handleLogin = () => {
-    window.location.href = "/api/login";
-  };
+  // Demo mode for Vercel - skip login
+  const isVercelDemo = window.location.hostname.includes('brilliantcv.ai') || window.location.hostname.includes('vercel.app');
+  if (isVercelDemo) {
+    window.location.href = "/dashboard";
+    return;
+  }
+  window.location.href = "/api/login";
+};
 
   const isActive = (path: string) => {
     return location === path || (path !== "/" && location.startsWith(path));
