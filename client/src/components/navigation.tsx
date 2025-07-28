@@ -27,7 +27,7 @@ export function Navigation() {
     window.location.href = "/dashboard";
     return;
   }
-  window.location.href = "/api/login";
+  window.location.href = "/dashboard";
 };
 
   const isActive = (path: string) => {
