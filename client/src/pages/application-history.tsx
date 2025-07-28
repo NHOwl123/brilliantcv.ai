@@ -77,7 +77,7 @@ export default function ApplicationHistory() {
         variant: "destructive",
       });
       setTimeout(() => {
-        window.location.href = "/api/login";
+        window.location.href = "/dashboard";
       }, 500);
     }
   }, [user, authLoading, toast]);
@@ -110,7 +110,7 @@ export default function ApplicationHistory() {
           variant: "destructive",
         });
         setTimeout(() => {
-          window.location.href = "/api/login";
+          window.location.href = "/dashboard";
         }, 500);
         return;
       }
@@ -139,7 +139,7 @@ export default function ApplicationHistory() {
           variant: "destructive",
         });
         setTimeout(() => {
-          window.location.href = "/api/login";
+          window.location.href = "/dashboard";
         }, 500);
         return;
       }
