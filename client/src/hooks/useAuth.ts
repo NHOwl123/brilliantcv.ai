@@ -11,15 +11,19 @@ export function useAuth() {
     queryFn: isVercelDemo ? 
       // Demo user for Vercel deployment
       async () => ({
-        id: 'demo-user-123',
-        email: 'demo@brilliantcv.ai',
-        firstName: 'Demo',
-        lastName: 'User',
-        subscriptionTier: 'free' as const,
-        subscriptionStatus: 'active' as const,
-        applicationsRemaining: 5,
-        applicationCount: 0
-      }) :
+  id: 'demo-user-123',
+  email: 'demo@brilliantcv.ai',
+  firstName: 'Demo',
+  lastName: 'User',
+  profileImageUrl: null,
+  stripeCustomerId: null,
+  stripeSubscriptionId: null,
+  subscriptionTier: 'free' as const,
+  subscriptionStatus: 'active' as const,
+  applicationCount: 0,
+  createdAt: new Date(),
+  updatedAt: new Date()
+}):
       // Normal API call for Replit
       getQueryFn({ on401: "returnNull" }),
     retry: false,
