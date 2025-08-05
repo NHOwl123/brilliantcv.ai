@@ -1,29 +1,39 @@
 import { useQuery } from "@tanstack/react-query";
 import { getQueryFn } from "@/lib/queryClient";
 import type { User } from "@shared/schema";
+import { useState, useEffect } from "react";
 
 export function useAuth() {
-  // Demo mode for Vercel deployment until API functions are working
-  const isVercelDemo = window.location.hostname.includes('brilliantcv.ai') || window.location.hostname.includes('vercel.app');
+  // Always use demo mode for now - simplify the logic
+  const isVercelDemo = true; // Force demo mode until API is fully working
+  const [isLoggedOut, setIsLoggedOut] = useState(false);
+  
+  // Check if user manually logged out
+  useEffect(() => {
+    const loggedOut = sessionStorage.getItem('demo-logged-out');
+    if (loggedOut) {
+      setIsLoggedOut(true);
+    }
+  }, []);
   
   const { data: user, isLoading } = useQuery<User>({
     queryKey: ["/api/auth/user"],
     queryFn: isVercelDemo ? 
-      // Demo user for Vercel deployment
+      // Demo user for deployment
       async () => ({
-  id: 'demo-user-123',
-  email: 'demo@brilliantcv.ai',
-  firstName: 'Demo',
-  lastName: 'User',
-  profileImageUrl: null,
-  stripeCustomerId: null,
-  stripeSubscriptionId: null,
-  subscriptionTier: 'free' as const,
-  subscriptionStatus: 'active' as const,
-  applicationCount: 0,
-  createdAt: new Date(),
-  updatedAt: new Date()
-}):
+        id: 'demo-user-123',
+        email: 'demo@brilliantcv.ai',
+        firstName: 'Demo',
+        lastName: 'User',
+        profileImageUrl: null,
+        stripeCustomerId: null,
+        stripeSubscriptionId: null,
+        subscriptionTier: 'premium' as const,
+        subscriptionStatus: 'active' as const,
+        applicationCount: 3,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }) :
       // Normal API call for Replit
       getQueryFn({ on401: "returnNull" }),
     retry: false,
@@ -34,8 +44,16 @@ export function useAuth() {
   });
 
   return {
-    user,
-    isLoading: isVercelDemo ? false : isLoading,
-    isAuthenticated: isVercelDemo ? true : !!user,
+    user: isLoggedOut ? null : user,
+    isLoading: false, // Always false in demo mode
+    isAuthenticated: !isLoggedOut, // False if user logged out
+    logout: () => {
+      sessionStorage.setItem('demo-logged-out', 'true');
+      setIsLoggedOut(true);
+    },
+    login: () => {
+      sessionStorage.removeItem('demo-logged-out');
+      setIsLoggedOut(false);
+    }
   };
 }

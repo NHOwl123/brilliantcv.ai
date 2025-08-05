@@ -25,21 +25,13 @@ function Router() {
 
   return (
     <Switch>
-      {!isAuthenticated ? (
-        <>
-          <Route path="/" component={Landing} />
-          <Route path="/landing" component={Landing} />
-        </>
-      ) : (
-        <>
-          <Route path="/" component={Dashboard} />
-          <Route path="/dashboard" component={Dashboard} />
-          <Route path="/profile-setup" component={ProfileSetup} />
-          <Route path="/generate-application" component={ApplicationGenerator} />
-          <Route path="/subscription" component={Subscription} />
-          <Route path="/applications" component={ApplicationHistory} />
-        </>
-      )}
+      <Route path="/" component={Landing} />
+      <Route path="/landing" component={Landing} />
+      <Route path="/dashboard" component={isAuthenticated ? Dashboard : Landing} />
+      <Route path="/profile-setup" component={ProfileSetup} />
+      <Route path="/generate-application" component={ApplicationGenerator} />
+      <Route path="/subscription" component={Subscription} />
+      <Route path="/applications" component={ApplicationHistory} />
       <Route component={NotFound} />
     </Switch>
   );

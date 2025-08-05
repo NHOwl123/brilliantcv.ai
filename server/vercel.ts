@@ -1,6 +1,9 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
-import { setupVite, serveStatic, log } from "./vite";
+import { serveStatic, log } from "./vite";
+
+// Set production environment
+process.env.NODE_ENV = 'production';
 
 const app = express();
 app.use(express.json());
@@ -36,8 +39,14 @@ app.use((req, res, next) => {
   next();
 });
 
-// Initialize the app configuration
-async function initializeApp() {
+// Initialize the Vercel app
+let initializedApp: express.Express | null = null;
+
+async function getApp() {
+  if (initializedApp) {
+    return initializedApp;
+  }
+
   const server = await registerRoutes(app);
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
@@ -48,34 +57,19 @@ async function initializeApp() {
     throw err;
   });
 
-  // importantly only setup vite in development and after
-  // setting up all the other routes so the catch-all route
-  // doesn't interfere with the other routes
-  if (app.get("env") === "development") {
-    await setupVite(app, server);
-  } else {
-    serveStatic(app);
+  // In production, serve static files
+  serveStatic(app);
+
+  initializedApp = app;
+  return app;
+}
+
+export default async function handler(req: any, res: any) {
+  try {
+    const app = await getApp();
+    return app(req, res);
+  } catch (error) {
+    console.error('Vercel handler error:', error);
+    return res.status(500).json({ error: 'Internal server error' });
   }
-
-  return { app, server };
 }
-
-// Configure and start based on environment
-if (process.env.VERCEL) {
-  // For Vercel - initialize but don't start server
-  await initializeApp();
-} else {
-  // For traditional deployment - initialize and start server
-  const { server } = await initializeApp();
-  const port = parseInt(process.env.PORT || '5000', 10);
-  server.listen({
-    port,
-    host: "0.0.0.0",
-    reusePort: true,
-  }, () => {
-    log(`serving on port ${port}`);
-  });
-}
-
-// Export the configured app for Vercel
-export default app;

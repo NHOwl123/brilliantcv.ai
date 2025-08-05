@@ -297,8 +297,9 @@ function getSession() {
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      secure: true,
-      maxAge: sessionTtl
+      secure: process.env.NODE_ENV === "production",
+      maxAge: sessionTtl,
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax"
     }
   });
 }
@@ -341,10 +342,48 @@ async function setupAuth(app2) {
     );
     passport.use(strategy);
   }
+  const vercelDomains = [
+    "brilliantcv.ai",
+    "brilliant3-ai.vercel.app",
+    "brilliantcv-ai.vercel.app"
+  ];
+  for (const domain of vercelDomains) {
+    const strategy = new Strategy(
+      {
+        name: `replitauth:${domain}`,
+        config,
+        scope: "openid email profile offline_access",
+        callbackURL: `https://${domain}/api/callback`
+      },
+      verify
+    );
+    passport.use(strategy);
+  }
+  if (process.env.NODE_ENV === "development") {
+    const localhostStrategy = new Strategy(
+      {
+        name: `replitauth:localhost`,
+        config,
+        scope: "openid email profile offline_access",
+        callbackURL: `http://localhost:5000/api/callback`
+      },
+      verify
+    );
+    passport.use(localhostStrategy);
+  }
   passport.serializeUser((user, cb) => cb(null, user));
   passport.deserializeUser((user, cb) => cb(null, user));
   app2.get("/api/login", (req, res, next) => {
-    passport.authenticate(`replitauth:${req.hostname}`, {
+    const strategy = `replitauth:${req.hostname}`;
+    if (!passport._strategy(strategy)) {
+      console.error(`No authentication strategy found for hostname: ${req.hostname}`);
+      console.error(`Available strategies: ${Object.keys(passport._strategies).join(", ")}`);
+      return res.status(404).json({
+        message: `Authentication not configured for domain: ${req.hostname}. Please use the Replit domain.`,
+        availableDomains: process.env.REPLIT_DOMAINS?.split(",") || []
+      });
+    }
+    passport.authenticate(strategy, {
       prompt: "login consent",
       scope: ["openid", "email", "profile", "offline_access"]
     })(req, res, next);
@@ -1643,7 +1682,7 @@ app.use((req, res, next) => {
   });
   next();
 });
-(async () => {
+async function initializeApp() {
   const server = await registerRoutes(app);
   app.use((err, _req, res, _next) => {
     const status = err.status || err.statusCode || 500;
@@ -1656,6 +1695,12 @@ app.use((req, res, next) => {
   } else {
     serveStatic(app);
   }
+  return { app, server };
+}
+if (process.env.VERCEL) {
+  await initializeApp();
+} else {
+  const { server } = await initializeApp();
   const port = parseInt(process.env.PORT || "5000", 10);
   server.listen({
     port,
@@ -1664,4 +1709,8 @@ app.use((req, res, next) => {
   }, () => {
     log(`serving on port ${port}`);
   });
-})();
+}
+var index_default = app;
+export {
+  index_default as default
+};

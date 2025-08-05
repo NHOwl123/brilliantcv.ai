@@ -7,6 +7,15 @@
   </head>
   <body>
     <div id="root"></div>
+    <!-- Temporary fix for Vercel API 404 errors -->
+    <script>
+      if (window.location.hostname.includes('brilliantcv.ai') || window.location.hostname.includes('vercel.app')) {
+        // Intercept login attempts and redirect to dashboard
+        if (window.location.pathname === '/api/login') {
+          window.location.href = '/dashboard';
+        }
+      }
+    </script>
     <script type="module" src="/src/main.tsx"></script>
 
   </body>

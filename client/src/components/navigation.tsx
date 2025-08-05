@@ -1,4 +1,4 @@
-import { Link, useLocation } from "wouter";
+import { Link, useLocation, useRouter } from "wouter";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { 
@@ -12,22 +12,27 @@ import {
 import { useState } from "react";
 
 export function Navigation() {
-  const { user, isAuthenticated } = useAuth();
-  const [location] = useLocation();
+  const { user, isAuthenticated, logout, login } = useAuth();
+  const [location, navigate] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleLogout = () => {
-    window.location.href = "/api/logout";
+    console.log("Logout button clicked - clearing session and reloading");
+    // Clear session storage completely
+    sessionStorage.clear();
+    localStorage.clear();
+    // Call logout function first
+    logout?.();
+    // Force complete page reload to ensure clean state
+    setTimeout(() => {
+      window.location.replace("/");
+    }, 50);
   };
 
   const handleLogin = () => {
-    // Demo mode for Vercel - skip login
-    const isVercelDemo = window.location.hostname.includes('brilliantcv.ai') || window.location.hostname.includes('vercel.app');
-    if (isVercelDemo) {
-      window.location.href = "/dashboard";
-      return;
-    }
-    window.location.href = "/dashboard";
+    console.log("Login button clicked - logging in and redirecting to dashboard");
+    login?.();
+    navigate("/dashboard");
   };
 
   const isActive = (path: string) => {

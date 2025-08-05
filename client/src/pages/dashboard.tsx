@@ -36,31 +36,34 @@ export default function Dashboard() {
 
   const { data: applications, isLoading: applicationsLoading } = useQuery<Application[]>({
     queryKey: ["/api/applications"],
+    queryFn: async () => {
+      // Demo data for demo mode
+      return [
+        {
+          id: "1",
+          jobTitle: "Senior Software Engineer",
+          company: "Tech Corp",
+          applicationStatus: "interview",
+          appliedDate: "2025-01-20",
+          interviewDate: "2025-01-30"
+        },
+        {
+          id: "2", 
+          jobTitle: "Product Manager",
+          company: "Innovation Inc",
+          applicationStatus: "applied",
+          appliedDate: "2025-01-18"
+        }
+      ];
+    },
     retry: false,
+    refetchOnWindowFocus: false,
   });
 
-  useEffect(() => {
-    if (!isLoading && !user) {
-      // Demo mode for Vercel - create a demo user
-      const isVercelDemo = window.location.hostname.includes('brilliantcv.ai') || window.location.hostname.includes('vercel.app');
-      if (isVercelDemo) {
-        // Don't redirect in demo mode, let the component render with demo data
-        return;
-      }
-      
-      toast({
-        title: "Unauthorized", 
-        description: "You are logged out. Redirecting to login...",
-        variant: "destructive",
-      });
-      setTimeout(() => {
-        window.location.href = "/";  // Redirect to landing page instead of dashboard
-      }, 500);
-    }
-  }, [user, isLoading, toast]);
+  // Remove the problematic useEffect that could cause loops
 
-  // Demo mode handling
-  const isVercelDemo = window.location.hostname.includes('brilliantcv.ai') || window.location.hostname.includes('vercel.app');
+  // Demo mode handling - simplified
+  const isVercelDemo = true; // Always demo mode for now
   
   if (isLoading) {
     return (

@@ -17,52 +17,32 @@ import {
 } from "lucide-react";
 
 export default function Landing() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, login } = useAuth();
 
   const handleLogin = () => {
-    // Demo mode for Vercel - skip login
-    const isVercelDemo = window.location.hostname.includes('brilliantcv.ai') || window.location.hostname.includes('vercel.app');
-    if (isVercelDemo) {
-      window.location.href = "/dashboard";
-      return;
-    }
+    console.log("Landing page login clicked");
+    login?.();
     window.location.href = "/dashboard";
   };
 
   const handleGetStarted = () => {
-    // Demo mode for Vercel - always go to dashboard
-    const isVercelDemo = window.location.hostname.includes('brilliantcv.ai') || window.location.hostname.includes('vercel.app');
-    if (isVercelDemo || isAuthenticated) {
-      window.location.href = "/dashboard";
-      return;
-    }
+    console.log("Get Started Free clicked - logging in and redirecting to dashboard");
+    login?.();
     window.location.href = "/dashboard";
   };
 
   const handleSubscriptionSelect = (tier: string) => {
-    // Demo mode for Vercel
-    const isVercelDemo = window.location.hostname.includes('brilliantcv.ai') || window.location.hostname.includes('vercel.app');
-    
+    console.log(`Subscription selected: ${tier}`);
     if (tier === "free") {
-      handleGetStarted();
-      return;
-    }
-    
-    if (isVercelDemo) {
-      // For demo mode, simulate subscription selection
-      localStorage.setItem("selectedTier", tier);
+      login?.();
       window.location.href = "/dashboard";
       return;
     }
     
-    if (!isAuthenticated) {
-      // Store selected tier in localStorage and redirect to dashboard
-      localStorage.setItem("selectedTier", tier);
-      window.location.href = "/dashboard";
-    } else {
-      // User is authenticated, redirect to subscription page with tier
-      window.location.href = `/subscription?tier=${tier}`;
-    }
+    // For paid tiers, redirect to subscription page
+    login?.();
+    localStorage.setItem("selectedTier", tier);
+    window.location.href = `/subscription?tier=${tier}`;
   };
 
   return (
@@ -118,6 +98,7 @@ export default function Landing() {
               <Button 
                 variant="outline" 
                 size="lg"
+                onClick={handleLogin}
                 className="border-2 border-primary text-primary hover:bg-primary hover:text-white px-8 py-4 text-lg font-semibold"
               >
                 Watch Demo

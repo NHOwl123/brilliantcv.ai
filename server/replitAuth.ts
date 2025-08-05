@@ -38,8 +38,9 @@ export function getSession() {
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === 'production',
       maxAge: sessionTtl,
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
     },
   });
 }
@@ -84,6 +85,7 @@ export async function setupAuth(app: Express) {
     verified(null, user);
   };
 
+  // Add Replit domains
   for (const domain of process.env
     .REPLIT_DOMAINS!.split(",")) {
     const strategy = new Strategy(
@@ -98,11 +100,57 @@ export async function setupAuth(app: Express) {
     passport.use(strategy);
   }
 
+  // Add Vercel production domains
+  const vercelDomains = [
+    'brilliantcv.ai',
+    'brilliant3-ai.vercel.app',
+    'brilliantcv-ai.vercel.app'
+  ];
+  
+  for (const domain of vercelDomains) {
+    const strategy = new Strategy(
+      {
+        name: `replitauth:${domain}`,
+        config,
+        scope: "openid email profile offline_access",
+        callbackURL: `https://${domain}/api/callback`,
+      },
+      verify,
+    );
+    passport.use(strategy);
+  }
+
+  // Add localhost support for development
+  if (process.env.NODE_ENV === 'development') {
+    const localhostStrategy = new Strategy(
+      {
+        name: `replitauth:localhost`,
+        config,
+        scope: "openid email profile offline_access",
+        callbackURL: `http://localhost:5000/api/callback`,
+      },
+      verify,
+    );
+    passport.use(localhostStrategy);
+  }
+
   passport.serializeUser((user: Express.User, cb) => cb(null, user));
   passport.deserializeUser((user: Express.User, cb) => cb(null, user));
 
   app.get("/api/login", (req, res, next) => {
-    passport.authenticate(`replitauth:${req.hostname}`, {
+    const strategy = `replitauth:${req.hostname}`;
+    
+    // Check if strategy exists for this hostname
+    if (!(passport as any)._strategy(strategy)) {
+      console.error(`No authentication strategy found for hostname: ${req.hostname}`);
+      console.error(`Available strategies: ${Object.keys((passport as any)._strategies).join(', ')}`);
+      return res.status(404).json({ 
+        message: `Authentication not configured for domain: ${req.hostname}. Please use the Replit domain.`,
+        availableDomains: process.env.REPLIT_DOMAINS?.split(',') || []
+      });
+    }
+    
+    passport.authenticate(strategy, {
       prompt: "login consent",
       scope: ["openid", "email", "profile", "offline_access"],
     })(req, res, next);
