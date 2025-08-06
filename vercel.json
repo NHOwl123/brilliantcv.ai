@@ -5,7 +5,7 @@
   "installCommand": "npm install",
   "functions": {
     "api/**/*.js": {
-      "runtime": "@vercel/node@latest"
+      "runtime": "@vercel/node@3.0.7"
     }
   },
   "rewrites": [
