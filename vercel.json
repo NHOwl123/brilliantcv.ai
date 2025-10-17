@@ -13,21 +13,20 @@
       "NODE_VERSION": "18"
     }
   },
-  "rewrites": [
+  "redirects": [
     {
       "source": "/leads",
-      "destination": "https://transfer-assistant-nhowl.replit.app/"
-    },
-    {
-      "source": "/leads/:path*",
-      "destination": "https://transfer-assistant-nhowl.replit.app/:path*"
-    },
+      "destination": "https://transfer-assistant-nhowl.replit.app/",
+      "permanent": false
+    }
+  ],
+  "rewrites": [
     {
       "source": "/api/(.*)",
       "destination": "/api/$1"
     },
     {
-      "source": "/((?!api|leads).*)",
+      "source": "/((?!api).*)",
       "destination": "/index.html"
     }
   ],
