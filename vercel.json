@@ -8,11 +8,6 @@
       "runtime": "@vercel/node@3.0.7"
     }
   },
-  "build": {
-    "env": {
-      "NODE_VERSION": "22"
-    }
-  },
   "redirects": [
     {
       "source": "/leads",
@@ -25,8 +20,7 @@
       "source": "/api/(.*)",
       "destination": "/api/$1"
     },
-   
-  {
+    {
       "source": "/((?!api).*)",
       "destination": "/index.html"
     }
