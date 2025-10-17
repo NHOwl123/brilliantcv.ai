@@ -23,7 +23,7 @@
       "destination": "/api/$1"
     },
     {
-      "source": "/((?!api).*)",
+      "source": "/((?!api|leads).*)",
       "destination": "/index.html"
     }
   ],
