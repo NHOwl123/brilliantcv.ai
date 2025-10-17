@@ -15,6 +15,10 @@
   },
   "rewrites": [
     {
+      "source": "/leads",
+      "destination": "https://transfer-assistant-nhowl.replit.app/"
+    },
+    {
       "source": "/leads/:path*",
       "destination": "https://transfer-assistant-nhowl.replit.app/:path*"
     },
