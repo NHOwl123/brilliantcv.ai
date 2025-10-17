@@ -15,6 +15,10 @@
   },
   "rewrites": [
     {
+      "source": "/leads/:path*",
+      "destination": "https://transfer-assistant-nhowl.replit.app/:path*"
+    },
+    {
       "source": "/api/(.*)",
       "destination": "/api/$1"
     },
@@ -26,12 +30,4 @@
   "env": {
     "NODE_ENV": "production"
   }
-}
-{
-  "rewrites": [
-    {
-      "source": "/leads/:path*",
-      "destination": "https://transfer-assistant-nhowl.replit.app/:path*"
-    }
-  ]
 }
