@@ -8,14 +8,11 @@
       "runtime": "@vercel/node@3.0.7"
     }
   },
-  "redirects": [
+  "rewrites": [
     {
       "source": "/leads",
-      "destination": "https://transfer-assistant-nhowl.replit.app/",
-      "permanent": false
-    }
-  ],
-  "rewrites": [
+      "destination": "/leads.html"
+    },
     {
       "source": "/api/(.*)",
       "destination": "/api/$1"
